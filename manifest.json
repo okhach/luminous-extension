@@ -1,0 +1,21 @@
+{
+    "manifest_version": 2,
+    "name": "ScreenShot Extension",
+    "version": "1.0",
+    "description": "A easy version of Chrome ScreenShot Extension",
+    "icons": {
+      "48": "icon.png"
+    },
+    "permissions": ["activeTab"],
+    "browser_action": {
+      "default_icon": "icon.png",
+      "default_popup": "popup.html"
+    },
+    "content_scripts": [
+      {
+        "matches": ["<all_urls>"],
+        "js": ["popup.js"]
+      }
+    ]
+  }
+  
