@@ -16,6 +16,9 @@
         "matches": ["<all_urls>"],
         "js": ["popup.js"]
       }
-    ]
+    ],
+    "web_accessible_resources": [
+      "sound.mp3"
+  ]
   }
   

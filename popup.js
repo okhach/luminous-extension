@@ -6,9 +6,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Send the blob to your server
         uploadToServer(blob, 'screenshot.png');
+
+        // Show the image after screenshot
+        var img = new Image();
+        img.src = dataUrl;
+        // Set image style to fit within the extension window
+        img.className = 'screenshot-image';
+        document.body.appendChild(img);
+
+        playSound();
       });
     });
 });
+
+function playSound() {
+  var audio = new Audio('sound.mp3');
+  audio.play();
+}
 
 function dataURLToBlob(dataUrl) {
   var byteString = atob(dataUrl.split(',')[1]);
@@ -30,6 +44,8 @@ function uploadToServer(blob, fileName) {
   xhr.onreadystatechange = function () {
     if (xhr.readyState === 4 && xhr.status === 200) {
       console.log('Upload successful');
+    } else {
+      console.log('Upload failed');
     }
   };
   xhr.send(formData);
