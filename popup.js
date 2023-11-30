@@ -14,13 +14,14 @@ document.addEventListener('DOMContentLoaded', function() {
         img.className = 'screenshot-image';
         document.body.appendChild(img);
 
-        playSound();
+        // Play the welcome audio first
+        playSound("welcome.mp3");
       });
     });
 });
 
-function playSound() {
-  var audio = new Audio('sound.mp3');
+function playSound(audioName) {
+  var audio = new Audio(audioName);
   audio.play();
 }
 
