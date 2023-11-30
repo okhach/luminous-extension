@@ -20,3 +20,17 @@ function dataURLToBlob(dataUrl) {
   }
   return new Blob([ab], { type: mimeString });
 }
+
+function uploadToServer(blob, fileName) {
+  var formData = new FormData();
+  formData.append('file', blob, fileName);
+
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', 'http://127.0.0.1:5000/upload', true);
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      console.log('Upload successful');
+    }
+  };
+  xhr.send(formData);
+}
