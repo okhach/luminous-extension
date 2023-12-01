@@ -9,7 +9,8 @@
   "permissions": [
     "tabCapture",
     "activeTab",
-    "microphone"
+    "microphone",
+    "host_permissions"
   ],
   "action": {
     "default_icon": "icon.png",
