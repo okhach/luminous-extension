@@ -1,4 +1,5 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
+    var img; // Variable to hold the captured image
     document.getElementById('captureBtn').addEventListener('click', function() {
       chrome.tabs.captureVisibleTab(null, { format: 'png' }, function (dataUrl) {
         // Convert Data URL to Blob
@@ -10,11 +11,14 @@ document.addEventListener('DOMContentLoaded', function() {
         uploadToServer(blob, screenshot_name);
 
         // Show the image after screenshot
-        var img = new Image();
+        img = new Image();
         img.src = dataUrl;
         // Set image style to fit within the extension window
         img.className = 'screenshot-image';
         document.body.appendChild(img);
+
+        // Show the prompt input and submit button
+        document.getElementById('promptSection').style.display = 'block';
       });
     });
 });
