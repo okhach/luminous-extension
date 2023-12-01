@@ -21,6 +21,17 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('promptSection').style.display = 'block';
       });
     });
+    
+    document.getElementById('submitBtn').addEventListener('click', function() {
+      var userPrompt = document.getElementById('userPrompt').value;
+  
+      // Generate a timestamped filename
+      var timestamp = new Date().toISOString().replace(/[-:T.]/g, '');
+      var screenshot_name = 'screenshot_' + timestamp + '.png';
+  
+      // Send the blob and the prompt to your server
+      uploadToServer(dataURLToBlob(img.src), screenshot_name, userPrompt);
+    });
 });
 
 function dataURLToBlob(dataUrl) {
