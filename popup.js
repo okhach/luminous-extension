@@ -17,24 +17,48 @@ document.addEventListener('DOMContentLoaded', function() {
         createImg(dataUrl);
         
         //Generate text box after image
-        generateTxt();
+        generateTxtAndButton();
   
         // Play the welcome audio first
         playSound(welcomeAudio);
 
-      
-        startRecording(audioBlob => {
-          // Generate a filename for the audio file
-          var timestamp = new Date().toISOString().replace(/[-:T.]/g, '');
-          var audioFileName = 'recording_' + timestamp + '.wav';
-      
-          // Send the audio blob to your server
-          uploadAudioToServer(audioBlob, audioFileName);
-        });
+        startRecording();
+
       });       
     });
   });
 });
+
+function startRecording() {
+  // var startBtn = document.getElementById('startButton');
+  var textBox = document.getElementById('userInput');
+
+  // 检查浏览器是否支持语音识别
+  var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
+  if (typeof SpeechRecognition === "undefined") {
+    textBox.placeholder = "Sorry! Your browser does not support audio recognition.";
+  } else {
+    var recognition = new SpeechRecognition();
+    recognition.continuous = true; // 持续识别
+    recognition.interimResults = true; // 返回临时结果
+    recognition.lang = "en-US"; // 设置语言为英语
+
+    recognition.onresult = function(event) {
+      var transcript = '';
+      for (var i = event.resultIndex; i < event.results.length; ++i) {
+        transcript += event.results[i][0].transcript;
+      }
+      textBox.value = transcript;
+    };
+
+    recognition.onerror = function(event) {
+      console.error("Audio recognition error: ", event.error);
+    };
+
+    recognition.start();
+  }
+}
+
 
 function createImg(dataUrl){
 var oldImg = document.querySelector('.screenshot-image');
@@ -47,15 +71,31 @@ img.className = 'screenshot-image';
 document.body.appendChild(img);
 }
 
-function generateTxt(){
+function generateTxtAndButton(){
 var oldInputBox = document.querySelector('input[type="text"]');
 if (oldInputBox) {
   document.body.removeChild(oldInputBox);
 }
+
+var oldStartButton = document.querySelector('button[type="button"]');
+if (oldStartButton) {
+  document.body.removeChild(oldStartButton);
+}
+
+
 var inputBox = document.createElement('input');
 inputBox.type = 'text';
 inputBox.placeholder = 'Message ChatGPT';
+inputBox.id = 'userInput';
 document.body.appendChild(inputBox);
+
+//button
+var startButton = document.createElement('button');
+startButton.type = 'button';
+startButton.textContent = 'Start Recording';
+startButton.id = 'startButton'; 
+startButton.addEventListener('click', startRecording, false);
+document.body.appendChild(startButton);
 }
 
 function playSound(audioName) {
@@ -92,56 +132,6 @@ xhr.onreadystatechange = function () {
     } else {
       console.log('Screenshot Upload failed');
     }
-  }
-};
-xhr.send(formData);
-}
-
-function startRecording(callback) {
-navigator.mediaDevices.getUserMedia({ audio: true })
-  .then(stream => {
-    const mediaRecorder = new MediaRecorder(stream);
-    let audioChunks = [];
-
-    mediaRecorder.addEventListener('dataavailable', event => {
-      audioChunks.push(event.data);
-    });
-
-    mediaRecorder.addEventListener('stop', () => {
-      const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-      callback(audioBlob); // Send the audio blob to the callback function
-    });
-
-    mediaRecorder.start();
-
-    // Stop recording after a set time (e.g., 5 seconds)
-    setTimeout(() => {
-      mediaRecorder.stop();
-    }, 5000);
-  })
-  .catch(err => {
-    if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
-      // User denied the permission
-      console.error('Microphone access denied. Please allow microphone access to record audio.');
-    } else {
-      console.error('Recording failed:', err);
-      // Handle other types of errors
-    }
-  });
-}
-
-function uploadAudioToServer(audioBlob, fileName) {
-var formData = new FormData();
-formData.append('file', audioBlob, fileName);
-
-var xhr = new XMLHttpRequest();
-xhr.open('POST', 'http://127.0.0.1:5000/upload/audio', true);
-xhr.onreadystatechange = function () {
-  if (xhr.readyState === 4 && xhr.status === 200) {
-    console.log('Audio upload successful');
-    // Handle the response here
-  } else if (xhr.readyState === 4) {
-    console.log('Audio upload failed');
   }
 };
 xhr.send(formData);
