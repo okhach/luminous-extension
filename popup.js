@@ -45,9 +45,10 @@ function dataURLToBlob(dataUrl) {
   return new Blob([ab], { type: mimeString });
 }
 
-function uploadToServer(blob, fileName) {
+function uploadToServer(blob, fileName, userPrompt) {
   var formData = new FormData();
   formData.append('file', blob, fileName);
+  formData.append('prompt', userPrompt);
 
   var xhr = new XMLHttpRequest();
   xhr.open('POST', 'http://127.0.0.1:5000/upload', true);
