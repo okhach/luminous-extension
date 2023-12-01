@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
         generateTxt();
   
         // Play the welcome audio first
-        //playSound(welcomeAudio);
+        playSound(welcomeAudio);
 
       
         startRecording(audioBlob => {
