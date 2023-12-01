@@ -45,6 +45,11 @@ function uploadToServer(blob, fileName) {
   xhr.onreadystatechange = function () {
     if (xhr.readyState === 4 && xhr.status === 200) {
       console.log('Upload successful');
+      // Parse the JSON response
+      var response = JSON.parse(xhr.responseText);
+      // Extract the blob_url
+      var blobUrl = response.blob_url;
+      console.log('Blob URL:', blobUrl);
     } else {
       console.log('Upload failed');
     }
