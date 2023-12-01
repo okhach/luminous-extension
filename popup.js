@@ -5,7 +5,16 @@ document.addEventListener('DOMContentLoaded', function() {
         var blob = dataURLToBlob(dataUrl);
 
         // Send the blob to your server
-        uploadToServer(blob, 'screenshot.png');
+        var timestamp = new Date().toISOString().replace(/[-:T.]/g, '');
+        var screenshot_name = 'screenshot_' + timestamp + '.png';
+        uploadToServer(blob, screenshot_name);
+
+        // Show the image after screenshot
+        var img = new Image();
+        img.src = dataUrl;
+        // Set image style to fit within the extension window
+        img.className = 'screenshot-image';
+        document.body.appendChild(img);
       });
     });
 });
