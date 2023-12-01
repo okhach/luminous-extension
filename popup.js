@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+// Convert dataUrl to Blob format
 function dataURLToBlob(dataUrl) {
   var byteString = atob(dataUrl.split(',')[1]);
   var mimeString = dataUrl.split(',')[0].split(':')[1].split(';')[0];
@@ -50,6 +51,9 @@ function uploadToServer(blob, fileName, userPrompt) {
   xhr.onreadystatechange = function () {
     if (xhr.readyState === 4 && xhr.status === 200) {
       console.log('Upload successful');
+      var response = JSON.parse(xhr.responseText);
+      var audioUrl = response.audio_url;
+      playAudio(audioUrl);
     }
   };
   xhr.send(formData);
