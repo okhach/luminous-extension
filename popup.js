@@ -58,3 +58,10 @@ function uploadToServer(blob, fileName, userPrompt) {
   };
   xhr.send(formData);
 }
+
+function playAudio(audioUrl) {
+  var audio = new Audio(audioUrl);
+  audio.play()
+    .then(() => console.log("Audio playback started"))
+    .catch(e => console.error("Error playing audio:", e));
+}
