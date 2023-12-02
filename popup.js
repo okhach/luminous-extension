@@ -60,8 +60,9 @@ function uploadToServer(blob, fileName, userPrompt) {
 }
 
 function playAudio(audioUrl) {
-  var audio = new Audio(audioUrl);
-  audio.play()
-    .then(() => console.log("Audio playback started"))
-    .catch(e => console.error("Error playing audio:", e));
+  var audio = document.getElementById('audioPlayer');
+  var source = document.getElementById('audioSource');
+  source.src = audioUrl;
+  audio.load(); // call this to just preload the audio without playing
+  audio.play(); // call this to play the song right away
 }
