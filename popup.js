@@ -2,18 +2,20 @@ document.addEventListener('DOMContentLoaded', function () {
     var img; // Variable to hold the captured image
     document.getElementById('captureBtn').addEventListener('click', function() {
       chrome.tabs.captureVisibleTab(null, { format: 'png' }, function (dataUrl) {
+        chrome.tabCapture.capture({audio: true, video: false}, function(stream) {
         // Convert Data URL to Blob
         var blob = dataURLToBlob(dataUrl);
+        var welcomeAudio = "welcome.mp3";
 
         // Show the image after screenshot
-        img = new Image();
-        img.src = dataUrl;
-        // Set image style to fit within the extension window
-        img.className = 'screenshot-image';
-        document.body.appendChild(img);
+        createImg(dataUrl);
+
+        // Play the welcome audio first
+        playSound(welcomeAudio);
 
         // Show the prompt input and submit button
         document.getElementById('promptSection').style.display = 'block';
+        });
       });
     });
     
@@ -28,6 +30,24 @@ document.addEventListener('DOMContentLoaded', function () {
       uploadToServer(dataURLToBlob(img.src), screenshot_name, userPrompt);
     });
 });
+
+//create screenshot
+function createImg(dataUrl){
+  var oldImg = document.querySelector('.screenshot-image');
+  if (oldImg) {
+    document.body.removeChild(oldImg);
+  }
+  img = new Image();
+  img.src = dataUrl;
+  img.className = 'screenshot-image';
+  document.body.appendChild(img);
+  }
+
+//play sound
+function playSound(audioName) {
+  var audio = new Audio(audioName);
+  audio.play();
+}
 
 // Convert dataUrl to Blob format
 function dataURLToBlob(dataUrl) {
