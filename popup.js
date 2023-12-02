@@ -3,20 +3,33 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('captureBtn').addEventListener('click', function() {
       chrome.tabs.captureVisibleTab(null, { format: 'png' }, function (dataUrl) {
         chrome.tabCapture.capture({audio: true, video: false}, function(stream) {
-        // Convert Data URL to Blob
-        var blob = dataURLToBlob(dataUrl);
+
         var welcomeAudio = "welcome.mp3";
 
         // Show the image after screenshot
         createImg(dataUrl);
 
+        // Show the prompt input and submit button
+        document.getElementById('promptSection').style.display = 'block';
+
         // Play the welcome audio first
         playSound(welcomeAudio);
 
-        // Show the prompt input and submit button
-        document.getElementById('promptSection').style.display = 'block';
+        if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+          // Speech recognition is supported
+          console.log('Speech recognition is supported.');
+        } else {
+          // Speech recognition is not supported
+          console.error('Speech recognition is not supported.');
+        }
+      
+        
         });
       });
+    });
+
+    document.getElementById('startRecognize').addEventListener('click', function() {
+      startSpeechRecognition();
     });
     
     document.getElementById('submitBtn').addEventListener('click', function() {
@@ -44,9 +57,32 @@ function createImg(dataUrl){
   }
 
 //play sound
-function playSound(audioName) {
-  var audio = new Audio(audioName);
-  audio.play();
+function playSound(soundFile) {
+  if (soundFile) {
+    var audioURL = chrome.runtime.getURL(soundFile);
+    var audio = new Audio(audioURL);
+    audio.play()
+      .then(() => console.log("Audio playback started"))
+      .catch(e => console.error("Error playing audio:", e));
+  }
+}
+
+// Start speech recognition
+function startSpeechRecognition() {
+  var recognition = new webkitSpeechRecognition();
+  recognition.lang = "en-US";
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  console.log('ready for start...');
+  recognition.start();
+  console.log('Start recording...');
+
+  recognition.onresult = function(event) {
+    var userPrompt = event.results[0][0].transcript;
+    console.log(userPrompt);
+    document.getElementById('userPrompt').value = userPrompt;
+  };
 }
 
 // Convert dataUrl to Blob format
