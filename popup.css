@@ -6,3 +6,7 @@
     display: block; /* Ensures the image is block-level for proper scaling */
     object-fit: contain; /* Ensures the image is scaled properly without distortion */
 }
+
+#audioPlayer {
+    width: 100%;
+  }
