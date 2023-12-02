@@ -3,18 +3,32 @@
 <head>
   <title>ScreenShot Extension</title>
   <script src="popup.js"></script>
+  <link rel="stylesheet" type="text/css" href="popup.css"> 
   <style>
     body {
       width: 200px;
       text-align: center;
     }
-    button {
+    button, input[type="text"] {
       margin: 10px;
+      display: block;
+    }
+    #promptSection {
+      display: none; /* Initially hidden */
     }
   </style>
 </head>
 <body>
   <h3>ScreenShot Extension</h3>
   <button id="captureBtn">Snipshot</button>
+  
+  <!-- Placeholder for the captured image -->
+  <img id="screenshotImage" style="max-width:100%; display:none;">
+
+  <!-- Section for prompt input and submit button -->
+  <div id="promptSection">
+    <input type="text" id="userPrompt" placeholder="Enter your prompt">
+    <button id="submitBtn">Submit</button>
+  </div>
 </body>
 </html>
