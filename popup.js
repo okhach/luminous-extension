@@ -46,10 +46,13 @@ function uploadToServer(blob, fileName, userPrompt) {
   formData.append('file', blob, fileName);
   formData.append('prompt', userPrompt);
 
+
+  showLoadingIndicator();
   var xhr = new XMLHttpRequest();
   xhr.open('POST', 'http://127.0.0.1:5000/upload', true);
   xhr.onreadystatechange = function () {
     if (xhr.readyState === 4 && xhr.status === 200) {
+      hideLoadingIndicator();
       console.log('Upload successful');
       var response = JSON.parse(xhr.responseText);
       var audioUrl = response.audio_url;
@@ -66,3 +69,13 @@ function playAudio(audioUrl) {
   audio.load(); // call this to just preload the audio without playing
   audio.play(); // call this to play the song right away
 }
+
+function showLoadingIndicator() {
+  document.getElementById('loadingIndicator').style.display = 'flex';
+}
+
+function hideLoadingIndicator() {
+  document.getElementById('loadingIndicator').style.display = 'none';
+}
+
+
