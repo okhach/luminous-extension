@@ -98,23 +98,40 @@ function dataURLToBlob(dataUrl) {
 
 function uploadToServer(blob, fileName, userPrompt) {
   var formData = new FormData();
-  formData.append("file", blob, fileName);
-  formData.append("prompt", userPrompt);
+  formData.append('file', blob, fileName);
+  formData.append('prompt', userPrompt);
 
   showLoadingIndicator();
   var xhr = new XMLHttpRequest();
-  xhr.open("POST", "http://127.0.0.1:5000/upload", true);
+  xhr.open('POST', 'http://127.0.0.1:5000/upload', true);
+
+  // Set timeout
+  var timeout = 300000; // 300 secs, 5 mins
+  var timeoutId = setTimeout(function() {
+      if (xhr.readyState !== 4) {
+          xhr.abort(); // cancel request
+          hideLoadingIndicator();
+          console.log('Upload timeout');
+          playTimeoutAudio(); // play timeout audio
+      }
+  }, timeout);
   xhr.onreadystatechange = function () {
-    if (xhr.readyState === 4 && xhr.status === 200) {
+    if (xhr.readyState === 4) {
+      clearTimeout(timeoutId); 
       hideLoadingIndicator();
-      console.log("Upload successful");
-      var response = JSON.parse(xhr.responseText);
-      var audioUrl = response.audio_url;
-      playAudio(audioUrl);
+      if (xhr.status === 200) {
+        console.log('Upload successful');
+        var response = JSON.parse(xhr.responseText);
+        var audioUrl = response.audio_url;
+        playAudio(audioUrl);
+      } else {
+        console.log('Upload failed');
+      }
     }
   };
   xhr.send(formData);
 }
+
 
 function playAudio(audioUrl) {
   var audio = document.getElementById("audioPlayer");
@@ -130,4 +147,9 @@ function showLoadingIndicator() {
 
 function hideLoadingIndicator() {
   document.getElementById("loadingIndicator").style.display = "none";
+}
+
+function playTimeoutAudio() {
+  var audio = document.getElementById('timeoutAudio');
+  audio.play();
 }
