@@ -38,3 +38,21 @@
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+#stopSpeechBtn {
+    margin: 10px;
+    display: block; /* Matches other buttons' style */
+    background-color: #f44336; /* Example styling, can be adjusted */
+    color: white; /* For contrast */
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 4px;
+}
+
+#stopSpeechBtn:hover {
+    background-color: #d32f2f; /* Darker shade for hover effect */
+}

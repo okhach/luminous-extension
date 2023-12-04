@@ -15,6 +15,15 @@ document.addEventListener("DOMContentLoaded", function () {
       // Show the prompt input and submit button
       document.getElementById("promptSection").style.display = "block";
     });
+
+    // Play the start recording sound
+    var audio = new Audio('https://msaiclassroom.blob.core.windows.net/beep-audio/tell-me-your-question.mp3');
+    audio.play();
+
+    // Start the speech recognition after the sound finishes
+    audio.onended = function() {
+        document.getElementById('speechBtn').click();
+    };
   });
 
   document.getElementById("submitBtn").addEventListener("click", function () {
@@ -26,35 +35,50 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Send the blob and the prompt to your server
     uploadToServer(dataURLToBlob(img.src), screenshot_name, userPrompt);
-
-    // Stop the speech recognition
-    recognition.stop();
   });
 
   // Check if SpeechRecognition is available
   if ("webkitSpeechRecognition" in window) {
     var recognition = new webkitSpeechRecognition();
-    recognition.continuous = true;
+    recognition.continuous = true; // Set to true for continuous recognition
     recognition.interimResults = true;
+    
+    // Variable to hold the final transcript
+    var final_transcript = "";
 
     document.getElementById("speechBtn").addEventListener("click", function () {
+      final_transcript = ''; // Reset transcript when starting a new session
       recognition.start();
-      recognition.onresult = function (event) {
-        var interim_transcript = "";
-        var final_transcript = "";
-
-        for (var i = event.resultIndex; i < event.results.length; ++i) {
-          if (event.results[i].isFinal) {
-            final_transcript += event.results[i][0].transcript;
-          } else {
-            interim_transcript += event.results[i][0].transcript;
-          }
-        }
-
-        // Update the user's prompt with the final transcript
-        document.getElementById("userPrompt").value = final_transcript;
-      };
+      document.getElementById("stopSpeechBtn").style.display = "block"; // Show the stop button
     });
+
+    document.getElementById("stopSpeechBtn").addEventListener("click", function () {
+      recognition.stop(); // Stop recognition when user clicks the stop button
+      document.getElementById("stopSpeechBtn").style.display = "none"; // Hide the stop button
+    });
+
+    recognition.onresult = function (event) {
+
+      for (var i = event.resultIndex; i < event.results.length; ++i) {
+        if (event.results[i].isFinal) {
+          final_transcript += event.results[i][0].transcript;
+        }
+      }
+  
+      // Update the user's prompt with the final transcript
+      document.getElementById("userPrompt").value = final_transcript;
+    };
+
+    recognition.onend = function () {
+      document.getElementById("stopSpeechBtn").style.display = "none";
+      // submit the prompt
+      document.getElementById('submitBtn').click();
+    };
+
+    recognition.onerror = function(event) {
+      // Handle any errors here
+      console.log('Recognition error: ' + event.error);
+    };
   } else {
     console.log("Speech Recognition API not supported in this browser.");
   }
