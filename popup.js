@@ -19,14 +19,42 @@ document.addEventListener('DOMContentLoaded', function () {
     
     document.getElementById('submitBtn').addEventListener('click', function() {
       var userPrompt = document.getElementById('userPrompt').value;
-  
+
       // Generate a timestamped filename
       var timestamp = new Date().toISOString().replace(/[-:T.]/g, '');
       var screenshot_name = 'screenshot_' + timestamp + '.png';
-  
+
       // Send the blob and the prompt to your server
       uploadToServer(dataURLToBlob(img.src), screenshot_name, userPrompt);
     });
+  
+// Check if SpeechRecognition is available
+if ('webkitSpeechRecognition' in window) {
+  var recognition = new webkitSpeechRecognition();
+  recognition.continuous = true;
+  recognition.interimResults = true;
+
+  document.getElementById('speechBtn').addEventListener('click', function() {
+    recognition.start();
+  recognition.onresult = function(event) {
+    var interim_transcript = '';
+    var final_transcript = '';
+
+    for (var i = event.resultIndex; i < event.results.length; ++i) {
+      if (event.results[i].isFinal) {
+        final_transcript += event.results[i][0].transcript;
+      } else {
+        interim_transcript += event.results[i][0].transcript;
+      }
+    }
+
+    // Update the user's prompt with the final transcript
+    document.getElementById('userPrompt').value = final_transcript;
+  };
+  });
+} else {
+  console.log("Speech Recognition API not supported in this browser.");
+}
 });
 
 // Convert dataUrl to Blob format
