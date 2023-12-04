@@ -26,6 +26,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
       // Send the blob and the prompt to your server
       uploadToServer(dataURLToBlob(img.src), screenshot_name, userPrompt);
+
+      // Stop the speech recognition
+      recognition.stop();
     });
   
 // Check if SpeechRecognition is available
