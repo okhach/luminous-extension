@@ -13,11 +13,11 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // Play the start recording sound
-    var audio = new Audio('https://msaiclassroom.blob.core.windows.net/beep-audio/tell-me-your-question.mp3');
-    audio.play();
+    var welcomeAudio = 'https://msaiclassroom.blob.core.windows.net/beep-audio/tell-me-your-question.mp3';
+    // var audio = playSound(welcomeAudio);
 
     // Start the speech recognition after the sound finishes
-    audio.onended = function() {
+    playSound(welcomeAudio).onended = function() {
         document.getElementById('speechBtn').click();
     };
   });
@@ -93,14 +93,15 @@ function createImg(dataUrl){
 }
 
 //play sound
-function playSound(soundFile) {
-  if (soundFile) {
-    var audioURL = chrome.runtime.getURL(soundFile);
-    var audio = new Audio(audioURL);
+function playSound(audioFile) {
+  if (audioFile) {
+    // var audioURL = chrome.runtime.getURL(soundFile);
+    var audio = new Audio(audioFile);
     audio.play()
       .then(() => console.log("Audio playback started"))
       .catch(e => console.error("Error playing audio:", e));
   }
+  return audio;
 }
 
 // Convert dataUrl to Blob format
