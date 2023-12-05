@@ -19,6 +19,8 @@
   </style>
 </head>
 <body>
+  <br>
+  <br>
   <div class="two alt-two">
     <h1>ScreenShot Extension
       <span> Be your eyes. </span>
@@ -26,30 +28,36 @@
   </div>
 
   <br>
-  <br>
 
   <button id="captureBtn" class="button-snapshot" role="button">Snapshot</button>
+
+  <br>
+  <br>
 
   <!-- Start recording button -->
   <button id="speechBtn" style="display: none;">Speak</button>
 
-  <!-- Stop recording button -->
-  <button id="stopSpeechBtn" style="display: none;">Stop</button>
-  
   <!-- Placeholder for the captured image -->
   <img id="screenshotImage" style="max-width:100%; display:none;">
 
   <!-- Section for prompt input and submit button -->
   <div id="promptSection">
-    <input type="text" id="userPrompt" placeholder="Enter your prompt">
+    <input type="text" id="userPrompt" placeholder="Enter your prompt" class="script">
     <button id="submitBtn" style="display: none;">Submit</button>
   </div>
+
+  <!-- Stop recording button -->
+  <button id="stopSpeechBtn" style="display: none;">Stop</button>
+
+  
 
   <!-- New audio player -->
   <audio id="audioPlayer" controls>
     <source id="audioSource" src="" type="audio/mpeg">
     Your browser does not support the audio element.
   </audio>
+
+  <hr>
 
   <div id="loadingIndicator">
     <div class="loader"></div>

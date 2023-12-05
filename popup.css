@@ -4,9 +4,34 @@ body {
     background-repeat: no-repeat;
   }
 
+.script {
+  box-shadow: inset #abacaf 0 0 0 2px;
+  border: 0;
+  background: rgba(0, 0, 0, 0);
+  appearance: none;
+  width: 80%;
+  position: relative;
+  border-radius: 3px;
+  padding: 9px 12px;
+  line-height: 1.4;
+  color: rgb(0, 0, 0);
+  font-size: 16px;
+  font-weight: 300;
+  height: 30px;
+  transition: all .2s ease;
+  :hover{
+    box-shadow: 0 0 0 0 #fff inset, #1de9b6 0 0 0 2px;
+  }
+  :focus{
+    background: #fff;
+    outline: 0;
+    box-shadow: 0 0 0 0 #fff inset, #1de9b6 0 0 0 3px;
+  }
+}
+
 
   
-/* CSS */
+/* button */
 .button-snapshot {
     background-color: #fbeee0;
     border: 2px solid #422800;
