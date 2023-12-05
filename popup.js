@@ -2,13 +2,9 @@ document.addEventListener("DOMContentLoaded", function () {
   var img;
   document.getElementById("captureBtn").addEventListener("click", function () {
     chrome.tabs.captureVisibleTab(null, { format: "png" }, function (dataUrl) {
-      // Convert Data URL to Blob
-     // var blob = dataURLToBlob(dataUrl);
-
       // Show the image after screenshot
       createImg(dataUrl);
       img = getImg(dataUrl);
-      console.log("1" + dataUrl);
 
       // Show the prompt input and submit button
       document.getElementById("promptSection").style.display = "block";
@@ -32,9 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var screenshot_name = "screenshot_" + timestamp + ".png";
 
     // Send the blob and the prompt to your server
-    console.log("next !");
     uploadToServer(dataURLToBlob(img.src), screenshot_name, userPrompt);
-    console.log("hah" + dataURLToBlob(dataUrl));
   });
 
   // Check if SpeechRecognition is available
