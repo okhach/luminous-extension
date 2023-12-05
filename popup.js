@@ -6,11 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
       var blob = dataURLToBlob(dataUrl);
 
       // Show the image after screenshot
-      img = new Image();
-      img.src = dataUrl;
-      // Set image style to fit within the extension window
-      img.className = "screenshot-image";
-      document.body.appendChild(img);
+      createImg(dataUrl);
 
       // Show the prompt input and submit button
       document.getElementById("promptSection").style.display = "block";
@@ -83,6 +79,29 @@ document.addEventListener("DOMContentLoaded", function () {
     console.log("Speech Recognition API not supported in this browser.");
   }
 });
+
+//create screenshot
+function createImg(dataUrl){
+  var oldImg = document.querySelector('.screenshot-image');
+  if (oldImg) {
+    document.body.removeChild(oldImg);
+  }
+  img = new Image();
+  img.src = dataUrl;
+  img.className = 'screenshot-image';
+  document.body.appendChild(img);
+}
+
+//play sound
+function playSound(soundFile) {
+  if (soundFile) {
+    var audioURL = chrome.runtime.getURL(soundFile);
+    var audio = new Audio(audioURL);
+    audio.play()
+      .then(() => console.log("Audio playback started"))
+      .catch(e => console.error("Error playing audio:", e));
+  }
+}
 
 // Convert dataUrl to Blob format
 function dataURLToBlob(dataUrl) {
