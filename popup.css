@@ -1,3 +1,10 @@
+body {
+    background-image: url('background.jpeg');
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+
+  
 .screenshot-image {
     max-width: 100%;
     max-height: 100%;
@@ -6,6 +13,7 @@
     display: block; /* Ensures the image is block-level for proper scaling */
     object-fit: contain; /* Ensures the image is scaled properly without distortion */
 }
+
 
 #audioPlayer {
     width: 100%;
