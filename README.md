@@ -30,6 +30,10 @@ Before you start, make sure you have:
 
 After completing these steps, the Luminous Extension should be installed and ready to use in your Chrome browser.
 
+## Start the server
+To use the extension, you will have to start your own server at the same time.
+You can find the server repo at this link: https://github.com/okhach/luminous-server.
+
 ---
 
 For any issues or queries, please raise an issue in the repository or contact the developer.
